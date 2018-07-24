@@ -35,6 +35,7 @@ defmodule FigureEight.MixProject do
 
   defp package do
     [
+      name: "figure_eight_elixir",
       licenses: ["GPL-3.0"],
       source_url: "https://github.com/elridion/figure_eight_elixir",
       maintainers: ["Hans Goedeke"],
