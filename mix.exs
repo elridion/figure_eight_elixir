@@ -3,26 +3,43 @@ defmodule FigureEight.MixProject do
 
   def project do
     [
-      app: :figure_eight_elixir,
-      version: "0.1.0",
+      app: :figure_eight,
+      version: "0.1.1",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
       deps: deps()
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      mod: {FigureEight.Application, []},
       extra_applications: [:logger]
     ]
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      # {:dep_from_hexpm, "~> 0.3.0"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      {:httpoison, "~> 1.0"},
+      {:poison, "~> 3.1"}
+    ]
+  end
+
+  defp description do
+    """
+    Pure Elixir wrapper for the Figure Eight API
+    """
+  end
+
+  defp package do
+    [
+      licenses: ["GPL-3.0"],
+      source_url: "https://github.com/elridion/figure_eight_elixir",
+      maintainers: ["Hans Goedeke"],
+      links: %{"GitHub" => "https://github.com/elridion/figure_eight_elixir"},
+      files: ["lib", "mix.exs", "README*", "LICENSE*"]
     ]
   end
 end
