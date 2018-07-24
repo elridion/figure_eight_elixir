@@ -17,12 +17,16 @@ defmodule FigureEight.Endpoint do
 
   def init(_args) do
     Logger.info("Endpoint started")
-    api_key = Application.get_env(:figure_eight, :api_key)
+    api_key = Application.get_env(:figure_eight, :api_key, "")
 
-    if is_bitstring(api_key) do
-      {:ok, %State{api_key: api_key}}
-    else
-      {:error, "No api key"}
+    cond do
+      api_key == "" ->
+        Logger.warn("Api Key not configured or empty")
+        {:ok, %State{api_key: api_key}}
+      is_bitstring(api_key) ->
+        {:ok, %State{api_key: api_key}}
+      true ->
+        {:error, "No api key"}
     end
   end
 
