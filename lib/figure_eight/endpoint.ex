@@ -23,8 +23,10 @@ defmodule FigureEight.Endpoint do
       api_key == "" ->
         Logger.warn("Api Key not configured or empty")
         {:ok, %State{api_key: api_key}}
+
       is_bitstring(api_key) ->
         {:ok, %State{api_key: api_key}}
+
       true ->
         {:error, "No api key"}
     end

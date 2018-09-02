@@ -1,5 +1,6 @@
 defmodule FigureEight.Entity.Account do
   @behaviour FigureEight.Entity
+  import FigureEight.Entity, only: [from_iso8601: 1]
   alias FigureEight.Request
 
   defstruct [
@@ -21,8 +22,7 @@ defmodule FigureEight.Entity.Account do
          {:ok, auth_code} <- Map.fetch(response, "auth_code"),
          {:ok, auth_key} <- Map.fetch(response, "auth_key"),
          {:ok, balance} <- Map.fetch(response, "balance"),
-         {:ok, raw_created_at} <- Map.fetch(response, "created_at"),
-         {:ok, created_at, _offset} <- DateTime.from_iso8601(raw_created_at),
+         {:ok, created_at} <- Map.fetch(response, "created_at"),
          {:ok, email} <- Map.fetch(response, "email"),
          {:ok, first_name} <- Map.fetch(response, "first_name"),
          {:ok, id} <- Map.fetch(response, "id"),
@@ -34,7 +34,7 @@ defmodule FigureEight.Entity.Account do
         auth_code: auth_code,
         auth_key: auth_key,
         balance: balance,
-        created_at: created_at,
+        created_at: from_iso8601(created_at),
         email: email,
         first_name: first_name,
         id: id,
@@ -44,7 +44,7 @@ defmodule FigureEight.Entity.Account do
       }
     else
       _err ->
-        {:error, response}
+        response
     end
   end
 

@@ -4,7 +4,7 @@ defmodule FigureEight.MixProject do
   def project do
     [
       app: :figure_eight,
-      version: "0.1.2",
+      version: "1.0.0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -15,7 +15,7 @@ defmodule FigureEight.MixProject do
 
   def application do
     [
-      mod: {FigureEight.Application, []},
+      mod: {FigureEight, []},
       extra_applications: [:logger]
     ]
   end
@@ -23,7 +23,8 @@ defmodule FigureEight.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.0"},
-      {:poison, "~> 3.1"}
+      {:poison, "~> 3.1"},
+      {:ex_doc, ">= 0.0.0", only: :dev}
     ]
   end
 

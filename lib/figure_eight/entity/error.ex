@@ -6,8 +6,7 @@ defmodule FigureEight.Entity.Error do
          {:ok, message} <- Map.fetch(error, "message") do
       %__MODULE__{message: message}
     else
-      _error ->
-        {:error, response}
+      _error -> response
     end
   end
 end
