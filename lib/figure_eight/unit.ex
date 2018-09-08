@@ -2,6 +2,7 @@ defmodule FigureEight.Unit do
   @behaviour FigureEight.Utils.Entity
   import FigureEight.Utils.Entity, only: [from_iso8601: 1]
   alias FigureEight.Utils.Request
+  alias FigureEight.Judgement
 
   defstruct [
     :agreement,
@@ -27,6 +28,7 @@ defmodule FigureEight.Unit do
          {:ok, judgments_count} <- Map.fetch(response, "judgments_count"),
          {:ok, missed_count} <- Map.fetch(response, "missed_count"),
          {:ok, results} <- Map.fetch(response, "results"),
+         {:ok, judgements} <- Map.fetch(results, "judgments"),
          {:ok, state} <- Map.fetch(response, "state"),
          {:ok, updated_at} <- Map.fetch(response, "updated_at") do
       %__MODULE__{
@@ -38,7 +40,7 @@ defmodule FigureEight.Unit do
         job_id: job_id,
         judgments_count: judgments_count,
         missed_count: missed_count,
-        results: results,
+        results: %{judgements: Enum.map(judgements, &Judgement.cast/1)},
         state: state,
         updated_at: from_iso8601(updated_at)
       }

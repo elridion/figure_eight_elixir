@@ -69,12 +69,8 @@ defmodule FigureEight.Endpoint do
           |> Request.append_response(response)
           |> evaluate()
         else
-          {
-            200,
             request
             |> Request.append_response(response)
-            |> evaluate()
-          }
         end
 
       {:error, _} = response ->

@@ -4,7 +4,7 @@ defmodule FigureEight.MixProject do
   def project do
     [
       app: :figure_eight,
-      version: "2.0.0-rc0",
+      version: "2.0.0-rc1",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       description: description(),
