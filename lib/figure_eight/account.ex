@@ -1,7 +1,7 @@
-defmodule FigureEight.Entity.Account do
-  @behaviour FigureEight.Entity
-  import FigureEight.Entity, only: [from_iso8601: 1]
-  alias FigureEight.Request
+defmodule FigureEight.Account do
+  @behaviour FigureEight.Utils.Entity
+  import FigureEight.Utils.Entity, only: [from_iso8601: 1]
+  alias FigureEight.Utils.Request
 
   defstruct [
     :akon_id,
@@ -48,9 +48,16 @@ defmodule FigureEight.Entity.Account do
     end
   end
 
-  def request(%{}) do
+  def get do
     %Request{
-      url: "account.json"
+      module: __MODULE__,
+      url: "account.json",
+      method: :get
     }
+  end
+
+  def get(api_key) do
+    get()
+    |> Request.add_param(:api_key, api_key)
   end
 end

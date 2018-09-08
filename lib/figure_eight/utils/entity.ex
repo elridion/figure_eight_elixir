@@ -1,6 +1,5 @@
-defmodule FigureEight.Entity do
+defmodule FigureEight.Utils.Entity do
   @callback cast(response :: map()) :: struct() | map()
-  @callback request(conditions :: map()) :: FigureEight.Request.t()
 
   def cast(response), do: response
 

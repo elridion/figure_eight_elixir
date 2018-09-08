@@ -1,9 +1,11 @@
-defmodule FigureEight.Entity.Job do
-  @behaviour FigureEight.Entity
-  import FigureEight.Entity, only: [from_iso8601: 1]
-  alias FigureEight.Request
+defmodule FigureEight.Job do
+  @behaviour FigureEight.Utils.Entity
+  import FigureEight.Utils.Entity, only: [from_iso8601: 1]
+  alias FigureEight.Utils.Request
+  alias FigureEight.Unit
 
   defstruct [
+    :row_ids,
     :execution_mode,
     :variable_judgments_mode,
     :title,
@@ -58,6 +60,10 @@ defmodule FigureEight.Entity.Job do
     :units_remain_finalized,
     :updated_at
   ]
+
+  def cast(response) when is_list(response) do
+    Enum.map(response, &cast/1)
+  end
 
   def cast(response) when is_map(response) do
     with {:ok, execution_mode} <- Map.fetch(response, "execution_mode"),
@@ -114,6 +120,7 @@ defmodule FigureEight.Entity.Job do
          {:ok, units_remain_finalized} <- Map.fetch(response, "units_remain_finalized"),
          {:ok, updated_at} <- Map.fetch(response, "updated_at") do
       %__MODULE__{
+        row_ids: Unit.list(id),
         execution_mode: execution_mode,
         variable_judgments_mode: variable_judgments_mode,
         title: title,
@@ -173,20 +180,49 @@ defmodule FigureEight.Entity.Job do
     end
   end
 
-  def request(%{team_id: team_id}) do
-    request(%{})
+  def cast(response) do
+    response
+  end
+
+  def get(job_id) do
+    %Request{
+      module: __MODULE__,
+      url: "jobs/#{job_id}.json",
+      method: :get
+    }
+  end
+
+  @doc """
+  Return all Job's either for the user which is used or for the team when a `team_id` is provided.
+  """
+  def list do
+    %Request{
+      module: __MODULE__,
+      url: "jobs.json",
+      method: :get
+    }
+  end
+
+  def list(team_id) do
+    list()
     |> Request.add_param(:team_id, team_id)
   end
 
-  def request(%{job_id: job_id}) do
+  def set_judgements_webhook(%__MODULE__{id: id}, val) when not is_nil(id) and is_boolean(val) do
+    set_judgements_webhook(id, val)
+  end
+
+  def set_judgements_webhook(job_id, val) when is_boolean(val) do
+    body = Plug.Conn.Query.encode(%{"job" => %{"send_judgments_webhook" => "#{val}"}})
+
     %Request{
-      url: "jobs/#{job_id}.json"
+      module: __MODULE__,
+      url: "jobs/#{job_id}.json",
+      method: :put,
+      body: body,
+      headers: %{"Content-Type" => "application/x-www-form-urlencoded"}
     }
   end
 
-  def request(_) do
-    %Request{
-      url: "jobs.json"
-    }
-  end
+  # TODO: pagination
 end

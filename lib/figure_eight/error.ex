@@ -1,4 +1,4 @@
-defmodule FigureEight.Entity.Error do
+defmodule FigureEight.Error do
   defstruct [:message]
 
   def cast(response) do
@@ -9,4 +9,6 @@ defmodule FigureEight.Entity.Error do
       _error -> response
     end
   end
+
+  def error(message), do: %__MODULE__{message: message}
 end

@@ -1,7 +1,7 @@
-defmodule FigureEight.Entity.Judgement do
-  @behaviour FigureEight.Entity
-  import FigureEight.Entity, only: [from_iso8601: 1]
-  alias FigureEight.Request
+defmodule FigureEight.Judgement do
+  @behaviour FigureEight.Utils.Entity
+  import FigureEight.Utils.Entity, only: [from_iso8601: 1]
+  alias FigureEight.Utils.Request
 
   defstruct [
     :acknowledged_at,
@@ -78,23 +78,35 @@ defmodule FigureEight.Entity.Judgement do
     end
   end
 
-  def request(%{job_id: job_id, unit_id: unit_id}) do
+  def get(job_id, unit_id) do
     %Request{
-      url: "jobs/#{job_id}/units/#{unit_id}/judgments.json"
+      module: __MODULE__,
+      url: "jobs/#{job_id}/units/#{unit_id}/judgments.json",
+      method: :get
     }
   end
 
-  def request(%{job_id: job_id, page: page}) do
+  def get(job_id) do
     %Request{
+      module: __MODULE__,
       url: "jobs/#{job_id}/judgments.json",
-      params: [page: page]
+      method: :get
     }
-  end
-
-  def request(%{job_id: _job_id} = con) do
-    con
-    |> Map.put(:page, 0)
-    |> request()
     |> Request.paginated()
   end
+
+  # def request(%{job_id: job_id, page: page}) do
+  #   %Request{
+  #     url: "jobs/#{job_id}/judgments.json",
+  #     params: [page: page],
+  #     method: :get
+  #   }
+  # end
+
+  # def request(%{job_id: _job_id} = con) do
+  #   con
+  #   |> Map.put(:page, 0)
+  #   |> request()
+  #
+  # end
 end

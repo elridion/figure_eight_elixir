@@ -4,7 +4,7 @@ defmodule FigureEight.MixProject do
   def project do
     [
       app: :figure_eight,
-      version: "1.0.0",
+      version: "2.0.0-rc0",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -24,7 +24,8 @@ defmodule FigureEight.MixProject do
     [
       {:httpoison, "~> 1.0"},
       {:poison, "~> 3.1"},
-      {:ex_doc, ">= 0.0.0", only: :dev}
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:plug, "~> 1.6"}
     ]
   end
 
@@ -36,7 +37,6 @@ defmodule FigureEight.MixProject do
 
   defp package do
     [
-      name: "figure_eight_elixir",
       licenses: ["GPL-3.0"],
       source_url: "https://github.com/elridion/figure_eight_elixir",
       maintainers: ["Hans Goedeke"],
